@@ -129,6 +129,9 @@ const processCitations = ({ citations, processor }) => {
 
   const citationsList = citations.map(citation => ({
     citationItems: citation.keys.map(id => ({ id })),
+    properties: {
+      noteIndex: 0,
+    },
   }))
 
   const result = processor.rebuildProcessorState(citationsList)
