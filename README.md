@@ -18,13 +18,13 @@ npm install mdx-paper
 
 ### References
 
-1. Add a references file as either BibTex, CiteProc JSON, CiteProc YML and use e.g. `--references references.bib` to specify the path.
-1. Specify a [CSL citation style](https://citationstyles.org/authors/) with `--citation-style nature`.
+1. Add a references file as either BibTex, CiteProc JSON or CiteProc YML and use e.g. `--references references.bib` to specify the path.
+1. Specify a [CSL citation style](https://citationstyles.org/authors/) with `--citation-style`, e.g. `--citation-style nature`.
 1. Use `import { Bibliography } from 'mdx-paper'` and place `<Bibliography/>` where you'd like the reference list to appear.
 
 ### Publishing
 
-1. Add a `now.json` file to automatically build and deploy the article to [Zeit Now](https://zeit.co/now), possibly via [Now for GitHub](https://zeit.co/github).
+1. To automatically build and deploy the article to [Zeit Now](https://zeit.co/now) add a `now.json` file and either connect the [Now for GitHub](https://zeit.co/github) application or run `now` locally.
 
 
 ## Examples
