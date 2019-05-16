@@ -2,6 +2,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin/dist/clean-webpack-plug
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
+const remarkSubSuper = require('remark-sub-super')
+const remarkSectionize = require('remark-sectionize')
+const citations = require('./plugins/citations')
 const pkg = require('../package.json')
 
 const babelLoader = {
@@ -11,7 +14,7 @@ const babelLoader = {
       [
         require.resolve('@babel/preset-env'),
         {
-          targets: ['since 2017-06'],
+          targets: ['last 2 years'],
         },
       ],
       require.resolve('@babel/preset-react'),
@@ -36,7 +39,15 @@ module.exports = {
       },
       {
         test: /\.mdx?$/,
-        use: [babelLoader, require.resolve('@mdx-js/loader')],
+        use: [
+          babelLoader,
+          {
+            loader: require.resolve('@mdx-js/loader'),
+            options: {
+              remarkPlugins: [remarkSubSuper, remarkSectionize, citations],
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,

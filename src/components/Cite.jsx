@@ -7,8 +7,8 @@ import { Arrow } from './Arrow'
 import { BibliographyItem } from './Bibliography'
 import { BibliographyContext } from './BibliographyProvider'
 
-export const Cite = ({ children }) => {
-  const [keys] = useState(children.split(/\s*;\s*/))
+export const Cite = ({ items }) => {
+  const [keys] = useState(items.split(/\s*;\s*/))
   const [isOpen, setOpen] = useState(false)
   const [citedItems, setCitedItems] = useState(null)
   const [label, setLabel] = useState(null)
