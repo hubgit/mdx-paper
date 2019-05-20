@@ -1,10 +1,18 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Article, Body, Main } from './components/Article'
-import { BibliographyProvider } from './components/BibliographyProvider'
-import Footer from './components/Footer'
-import Header from './components/Header'
+import { MDXProvider } from '@mdx-js/react'
+import * as components from '@aeaton/react-paper'
+
+const {
+  Article,
+  BibliographyProvider,
+  Body,
+  Cite,
+  Footer,
+  Header,
+  Main,
+} = components
 
 const Contents = require(process.env.CONTENTS_PATH).default
 
@@ -33,25 +41,30 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const rootContainer = document.body.appendChild(document.createElement('div'))
-export const popperContainer = document.body.appendChild(
-  document.createElement('div')
-)
-
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    <BibliographyProvider references={references} citationStyle={citationStyle}>
-      <GlobalStyle />
-      <Article>
-        <Header metadata={metadata} />
-        <Main>
-          <Body>
-            <Contents />
-          </Body>
-        </Main>
-        <Footer metadata={metadata} />
-      </Article>
-    </BibliographyProvider>
+    <MDXProvider
+      components={{
+        ...components,
+        cite: Cite,
+      }}
+    >
+      <BibliographyProvider
+        references={references}
+        citationStyle={citationStyle}
+      >
+        <GlobalStyle />
+        <Article>
+          <Header metadata={metadata} />
+          <Main>
+            <Body>
+              <Contents />
+            </Body>
+          </Main>
+          <Footer metadata={metadata} />
+        </Article>
+      </BibliographyProvider>
+    </MDXProvider>
   </ThemeProvider>,
-  rootContainer
+  document.getElementById('root')
 )
