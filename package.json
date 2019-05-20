@@ -1,6 +1,6 @@
 {
   "name": "mdx-paper",
-  "version": "0.3.0-6",
+  "version": "0.3.0",
   "main": "dist/components",
   "license": "MIT",
   "repository": "github:hubgit/mdx-paper",
