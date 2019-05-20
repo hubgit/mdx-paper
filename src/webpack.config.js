@@ -85,6 +85,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       inject: true,
       title: process.env.TITLE,
+      template: __dirname + '/index.html',
       // meta: {
       //   generator: `mdx-paper v${pkg.version}`,
       // },

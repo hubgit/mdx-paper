@@ -15,7 +15,7 @@ module.exports = () => tree => {
 
         node.type = 'html'
         node.children = undefined
-        node.value = `<Cite items="${keys.join(';')}"/>`
+        node.value = `<cite items="${keys.join(';')}"></cite>`
       }
     })
   })
