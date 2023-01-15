@@ -1,11 +1,13 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin/dist/clean-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
-const path = require('path')
-const remarkSubSuper = require('remark-sub-super')
-const remarkSectionize = require('remark-sectionize')
-const citations = require('./plugins/citations')
-const pkg = require('../package.json')
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import webpack from 'webpack'
+import remarkSubSuper from 'remark-sub-super'
+import remarkSectionize from 'remark-sectionize'
+import citations from './plugins/citations.js'
+import { pathToFileURL } from 'node:url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const babelLoader = {
   loader: require.resolve('babel-loader'),
@@ -19,14 +21,13 @@ const babelLoader = {
       ],
       require.resolve('@babel/preset-react'),
     ],
-    plugins: [require.resolve('@babel/plugin-syntax-dynamic-import')],
   },
 }
 
-module.exports = {
-  entry: path.resolve(__dirname, './index.js'),
+export default {
+  entry: new URL('./index.js', import.meta.url).pathname,
   output: {
-    path: path.resolve(process.cwd(), './dist'),
+    path: new URL('./dist', pathToFileURL(process.cwd())).pathname,
     filename: '[name].[contenthash].js',
   },
   module: {
@@ -85,7 +86,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       inject: true,
       title: process.env.TITLE,
-      template: __dirname + '/index.html',
+      template: new URL('./index.html', import.meta.url).pathname,
       // meta: {
       //   generator: `mdx-paper v${pkg.version}`,
       // },
@@ -102,14 +103,10 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.mdx'],
     alias: {
-      // 'mdx-paper': path.resolve(__dirname, '..'),
+      // 'mdx-paper': new URL('..', import.meta.url).pathname
     },
     modules: [
-      // path.relative(
-      //   process.cwd(),
-      //   path.join(__dirname, '..', 'node_modules')
-      // ),
-      path.resolve(__dirname, '..', 'node_modules'),
+      new URL('../node_modules', import.meta.url).pathname,
       'node_modules',
     ],
   },

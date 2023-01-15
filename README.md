@@ -24,7 +24,7 @@ npm install mdx-paper
 
 ### Publishing
 
-1. To automatically build and deploy the article to [Zeit Now](https://zeit.co/now) add a `now.json` file and either connect the [Now for GitHub](https://zeit.co/github) application or run `now` locally.
+1. To automatically build and deploy the article to [Vercel](https://vercel.com/) either connect the [Vercel for GitHub](https://vercel.com/github) application or run [`vercel`](https://vercel.com/docs/cli) locally.
 
 
 ## Examples

@@ -1,5 +1,5 @@
-require('typeface-noto-sans')
-require('typeface-noto-serif')
+import '@fontsource/noto-sans'
+import '@fontsource/noto-serif'
 
 module.exports = {
   background: '#fff',

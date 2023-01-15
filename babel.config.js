@@ -1,7 +1,3 @@
-module.exports = {
+export default {
   presets: ['@babel/react'],
-  plugins: [
-    '@babel/syntax-dynamic-import',
-    '@babel/transform-modules-commonjs',
-  ],
 }

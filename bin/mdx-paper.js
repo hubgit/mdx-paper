@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-
-const path = require('path')
-const yargs = require('yargs')
-const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
-const pkg = require('../package.json')
+import path from 'path'
+import yargs from 'yargs'
+import webpack from 'webpack'
+import WebpackDevServer from 'webpack-dev-server'
+import pkg from '../package.json' assert { type: 'json' }
 
 const builder = yargs => {
   yargs
@@ -40,28 +39,21 @@ const setEnvironmentVariables = argv => {
   process.env.TITLE = argv.title || 'Paper'
   process.env.CONTENTS_PATH = path.resolve(argv.file)
   process.env.METADATA_PATH = path.resolve(argv.metadata)
+  process.env.REFERENCES_PATH = argv.references ? path.resolve(argv.references) : ''
+  process.env.THEME_PATH = argv.theme ? path.resolve(argv.theme) : ''
 
-  if (argv.references) {
-    process.env.REFERENCES_PATH = path.resolve(argv.references)
-  }
-
-  if (argv.theme) {
-    process.env.THEME_PATH = path.resolve(argv.theme)
-  }
 }
 
 const findWebpackConfig = () => {
   // TODO: global? require.resolve?
   // console.log(require.resolve('mdx-paper'))
   // const path = require.resolve('mdx-paper/dist/webpack.config.js')
-
   const path = process.cwd() + '/node_modules/mdx-paper/dist/webpack.config.js'
 
-  return require(path)
+  return import(path).then(m => m.default)
 }
 
-// noinspection BadExpressionStatementJS
-yargs
+yargs((process.argv.slice(2)))
   .scriptName('npx mdx-paper')
   .version(pkg.version)
   .usage('$0 <cmd> [args]')
@@ -69,7 +61,7 @@ yargs
     ['$0 [file]', 'dev [file]'], // default
     'start dev server',
     builder,
-    argv => {
+    async argv => {
       console.log('starting dev server…')
       console.log(argv)
 
@@ -77,26 +69,27 @@ yargs
 
       process.env.NODE_ENV = 'development'
 
-      const webpackConfig = findWebpackConfig()
+      const webpackConfig = await findWebpackConfig()
       webpackConfig.mode = 'development'
-      webpackConfig.devtool = 'cheap-eval-source-map'
+      webpackConfig.devtool = 'eval-cheap-source-map'
       const compiler = webpack(webpackConfig)
 
-      const devServer = new WebpackDevServer(compiler, {
-        hot: true,
-        historyApiFallback: true,
-        inline: false,
-      })
-
-      const hostname = 'localhost'
+      const host = 'localhost'
       const port = process.env.PORT || 8080
 
-      devServer.listen(port, hostname, () => {
-        console.log(`Listening at http://${hostname}:${port}`)
+      const devServer = new WebpackDevServer( {
+        hot: true,
+        historyApiFallback: true,
+        port,
+        host,
+      }, compiler)
+
+      devServer.startCallback(() => {
+        console.log(`Listening at http://${host}:${port}`)
       })
     }
   )
-  .command(['build [file]'], 'build the paper', builder, argv => {
+  .command(['build [file]'], 'build the paper', builder, async argv => {
     console.log('building…')
     console.log(argv)
 
@@ -104,7 +97,7 @@ yargs
 
     process.env.NODE_ENV = 'production'
 
-    const webpackConfig = findWebpackConfig()
+    const webpackConfig = await findWebpackConfig()
     webpackConfig.mode = 'production'
     const compiler = webpack(webpackConfig)
 
